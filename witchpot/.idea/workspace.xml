@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="28832d1b-610d-4105-adc8-75e145f2d1c2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/potion.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../candle_trade_functional.py" beforeDir="false" afterPath="$PROJECT_DIR$/../candle_trade_functional.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../data/merged/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../feed.py" beforeDir="false" afterPath="$PROJECT_DIR$/../feed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../trend.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../trend.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/mappers/SymbolToLinearTrend.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/mappers/SymbolToLinearTrend.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/mappers/UtilDate.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/mappers/UtilDate.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/Symbol.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/Symbol.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/TimeSeries.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/TimeSeries.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/timeseries/indicators/Indicator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/model/timeseries/indicators/Indicator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/preprocessing/Trend.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/witchpot/preprocessing/Trend.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/candleColumns.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/candleColumns.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/candleColumnsCsv.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/candleColumnsCsv.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/AAPL.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/AAPL.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/FRQ.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/FRQ.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/candle_frecuency.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/candle_frecuency.csv" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2gI2DtVG9cc2YUlSDH4IaVprAxv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="28832d1b-610d-4105-adc8-75e145f2d1c2" name="Changes" comment="" />
+      <created>1715370655539</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715370655539</updated>
+    </task>
+    <servers />
+  </component>
+</project>

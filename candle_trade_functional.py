@@ -165,7 +165,7 @@ def evaluate(symbol, cashh):
     validate_path = f"data/symbols/validate/{symbol}.csv"
     test_path = f"data/symbols/test/{symbol}.csv"
 
-    candle_frequency = pd.read_csv("data/merged/candle_frecuency.csv", index_col='TrendDirection')
+    candle_frequency = pd.read_csv("data/symbols/train/merged/candle_frecuency.csv", index_col='TrendDirection')
     pool = Pool(cpu_count())
 
     train_search_space = [(train_path, candle_frequency, stop_loss, take_profit, cash) for stop_loss in range(1, 10) for take_profit in range(1, 10)]
@@ -191,7 +191,7 @@ def evaluate(symbol, cashh):
 
 if __name__ == "__main__":
     all_results = pd.DataFrame(data = list(), columns= ["symbol", "stop_loss", "take_profit", "final_value"])
-    symbols = list(map(lambda name: name.split(".")[0], os.listdir("data/symbols/train")))
+    symbols = list(map(lambda name: name.split(".")[0], os.listdir("data/symbols/train")))[0: 100]
     cash = 1000
     for symbol in symbols:
         results = evaluate(symbol, cash)
@@ -201,5 +201,5 @@ if __name__ == "__main__":
             print("Results for symbol: ", symbol)
             print(results)
             all_results = pd.concat([all_results, results], ignore_index=True)
-            all_results.to_csv("data/merged/all_results.csv")
+            all_results.to_csv("data/results/all_results.csv")
             gc.collect()

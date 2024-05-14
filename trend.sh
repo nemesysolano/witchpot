@@ -1,4 +1,5 @@
 #!/bin/bash
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd witchpot
-mvn test -Dtest=TrendTest -Dsymbols.folder=/media/rsolano/ubuntu-internal/workspaces/tensorflow/data/symbols/train -Dmerged.folder=/media/rsolano/ubuntu-internal/workspaces/tensorflow/data/symbols/train/merged
+mvn surefire:test -Dtest=TrendTest -Dsymbols.folder=${SCRIPT_DIR}/data/symbols/train -Dmerged.folder=${SCRIPT_DIR}/data/symbols/train/merged
 cd ..

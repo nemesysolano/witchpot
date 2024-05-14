@@ -42,6 +42,6 @@ def download_from_yahoo(symbol):
 
 if __name__ == "__main__":
     pool = Pool(cpu_count())
-    sp500 = pd.read_csv('data/russell100.csv', index_col= 'Symbol')    
+    sp500 = pd.read_csv('catalog/russell100.csv', index_col= 'Symbol')    
     pool.map(download_from_yahoo, sp500.index)
     
