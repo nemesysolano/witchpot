@@ -3,3 +3,5 @@ data/symbols/validate/*.csv
 data/symbols/train/*.csv
 data/symbols/*.csv
 data/symbols/train/merged/market_trends.csv
+*.o
+*.class
