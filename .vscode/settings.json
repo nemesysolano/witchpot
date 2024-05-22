@@ -71,7 +71,8 @@
         "type_traits": "cpp",
         "set": "cpp",
         "__mutex_base": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "numeric": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

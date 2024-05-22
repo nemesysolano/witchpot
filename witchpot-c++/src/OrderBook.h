@@ -1,28 +1,20 @@
 #ifndef __ORDER_BOOK_H__
 #define __ORDER_BOOK_H__
 #include "Timeseries.h"
-#include "Order.h"
+#include "OrderBookEntry.h"
 #include <set>
 #include <map>
 #include <memory>
 namespace witchpot {
-    struct OrderBookEntry {
-        OrderStatus status;
-        std::string orderId;
-        std::string limitOrderId;
-        std::string stopOrderId;
-        OrderBookEntry(OrderStatus status, std::string orderId, std::string limitOrderId, std::string stopOrderId): status(status), orderId(orderId), limitOrderId(limitOrderId), stopOrderId(stopOrderId) {}
-    };
-
     class OrderBook{
-        protected:
-            std::set<std::string> pendingOrderEntries;
-            std::set<std::string> acceptedOrderEntries;
-            std::set<std::string> failedOrderEntries;
-            std::set<std::string> cancelledOrderEntries;            
-            std::set<std::string> filledOrderEntries;
-            std::map<std::string, std::unique_ptr<Order>> allOrderEntries;            
-            std::unique_ptr<OrderBookEntry> createOrder(
+        private:
+            std::unordered_map<std::string, const OrderBookEntry *> * orderEntries;
+            std::unordered_map<std::string, const OrderBookEntry *> * acceptedOrderEntries;
+            std::unordered_map<std::string, const OrderBookEntry *> * filledOrderEntries;
+            std::unordered_map<std::string, const OrderBookEntry *> * cancelledOrderEntries;
+            bool is_owner;
+            const OrderBookEntry & createOrder(
+                Timestamp & timestamp,
                 std::string symbol,
                 float price,
                 int quantity,
@@ -31,13 +23,19 @@ namespace witchpot {
                 OrderSide side
             );
         public:
-            OrderBook() {}
-            OrderBook(const OrderBook & orderBook) = delete;
-            OrderBook & operator=(const OrderBook & orderBook) = delete;
-            OrderBook(OrderBook && orderBook) = delete;
-            OrderBook & operator=(OrderBook && orderBook) = delete;
+            OrderBook(): is_owner(true) {
+                orderEntries = new std::unordered_map<std::string, const OrderBookEntry *>();
+                acceptedOrderEntries = new std::unordered_map<std::string, const OrderBookEntry *>();
+                filledOrderEntries = new std::unordered_map<std::string, const OrderBookEntry *>();
+                cancelledOrderEntries = new std::unordered_map<std::string, const OrderBookEntry *>();
+            }
+            OrderBook(const OrderBook && other) = delete;
+            OrderBook & operator=(const OrderBook && other) = delete;
+            OrderBook(const OrderBook & other);
+            OrderBook & operator=(const OrderBook & other);
 
-            std::unique_ptr<OrderBookEntry> createBuyOrder (
+            const OrderBookEntry & createBuyOrder (
+                Timestamp & timestamp,
                 std::string symbol,
                 float price,
                 int quantity,
@@ -45,13 +43,22 @@ namespace witchpot {
                 float limit
             );
 
-            std::unique_ptr<OrderBookEntry> createSellOrder (
+            const OrderBookEntry & createSellOrder (
+                Timestamp & timestamp,
                 std::string symbol,
                 float price,
                 int quantity,
                 float stop,
                 float limit
-            );            
+            );    
+
+            std::vector<const OrderBookEntry *> fillOrders(std::function<bool(const OrderBookEntry &)> filterFunc); // This function is not thread safe
+            std::vector<const OrderBookEntry *> acceptedOrders(std::function<bool(const OrderBookEntry &)> filterFunc);// This function is not thread safe
+            std::vector<const OrderBookEntry *> acceptedOrders();// This function is not thread safe
+            inline size_t acceptedOrdersCount() const { return acceptedOrderEntries->size(); }// This function is not thread safe
+
+            virtual ~OrderBook();
+            
     };
 }
 #endif

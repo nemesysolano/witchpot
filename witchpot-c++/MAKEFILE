@@ -1,8 +1,8 @@
 CC = g++
 CFLAGS = -g -Wall -Wextra --std=c++20
 
-SRCS = src/ComparablePointer.cpp src/model.cpp src/strategy.cpp src/OrderBook.cpp src/Order.cpp src/indicator.cpp src/witchpot.cpp src/Timestamp.cpp src/FeedEntry.cpp src/Timeseries.cpp
-OBJS = obj/ComparablePointer.o   obj/model.o   obj/strategy.o   obj/OrderBook.o   obj/Order.o   obj/indicator.o   obj/witchpot.o   obj/Timestamp.o   obj/FeedEntry.o   obj/Timeseries.o
+SRCS = src/Transaction.cpp src/TransactionLog.cpp src/OrderBookEntry.cpp src/Schema.cpp src/Driver.cpp src/OrderBook.cpp src/Order.cpp src/Omen.cpp src/witchpot.cpp src/Timestamp.cpp src/FeedEntry.cpp src/Timeseries.cpp
+OBJS = obj/Transaction.o   obj/TransactionLog.o   obj/OrderBookEntry.o   obj/Schema.o   obj/Driver.o   obj/OrderBook.o   obj/Order.o   obj/Omen.o   obj/witchpot.o   obj/Timestamp.o   obj/FeedEntry.o   obj/Timeseries.o
 EXEC = bin/witchbot
 
 .PHONY: all clean
@@ -19,3 +19,5 @@ clean:
 	rm -rf obj/*.o $(EXEC)
 
 # leaks --atExit -- bin/witchbot 
+# https://gist.github.com/asimshankar/5c96acd1280507940bad9083370fe8dc
+# https://medium.com/@htmbx6/build-and-train-neural-network-with-tensorflow-c-f13f22d3c5b6

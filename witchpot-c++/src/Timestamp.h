@@ -20,11 +20,12 @@ namespace witchpot {
 
         Timestamp(const Timestamp & timestamp): year(timestamp.year), month(timestamp.month), day(timestamp.day), hour(timestamp.hour), minute(timestamp.minute), second(timestamp.second) {}
         Timestamp(const Timestamp && timestamp): year(timestamp.year), month(timestamp.month), day(timestamp.day), hour(timestamp.hour), minute(timestamp.minute), second(timestamp.second) {}
-        Timestamp(): year(-1), month(-1), day(-1), hour(-1), minute(-1), second(-1) {}
+        
+        Timestamp(): year(0), month(0), day(0), hour(0), minute(0), second(0) {}
         Timestamp(int year, int month, int day, int hour, int minute, int second): year(year), month(month), day(day), hour(hour), minute(minute), second(second) {}
         Timestamp(int year, int month, int day): year(year), month(month), day(day), hour(0), minute(0), second(0) {}
         Timestamp(const std::string & timestamp);
-        Timestamp(const std::string && timestamp): Timestamp(timestamp) {};
+        Timestamp(const std::string && timestamp): Timestamp(timestamp) {};        
         inline int getYear() const { return year; }
         inline int getMonth() const { return month; }
         inline int getDay() const { return day; }
@@ -57,11 +58,11 @@ namespace witchpot {
             return *this;
         }
 
-        inline Timestamp operator ++ (int) {
+        inline Timestamp operator ++ (int) { // Postfix increment operator.
             return inc(1);
         }
 
-        inline Timestamp & operator ++ () {
+        inline Timestamp & operator ++ () { // Prefix decrement operator.
             return incSelf(1);
         }
 

@@ -11,7 +11,7 @@ Timestamp::Timestamp(const std::string & timestamp) {
     
     // Parse the timestamp string
     int year, month, day, hour, minute, second;
-    int result = sscanf(timestamp.c_str(), format.c_str(), &year, &month, &day, &hour, &minute, &second);
+    auto result = sscanf(timestamp.c_str(), format.c_str(), &year, &month, &day, &hour, &minute, &second);
     
     // Check if the parsing was successful
     if (result == 6) {
@@ -40,10 +40,10 @@ Timestamp Timestamp::addDay(int days) const {
 }
 
 void Timestamp::addDayToSelf(int days) {
-    int totalDays = day + days;
-    int currentYear = year;
-    int currentMonth = month;
-    int currentDay = totalDays;
+    auto totalDays = day + days;
+    auto currentYear = year;
+    auto currentMonth = month;
+    auto currentDay = totalDays;
     
     while (currentDay > daysInMonth[currentMonth - 1]) {
         if (currentMonth == 2 && isLeapYear(currentYear)) {

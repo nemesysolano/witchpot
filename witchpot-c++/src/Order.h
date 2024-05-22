@@ -3,23 +3,20 @@
 
 #include <string>
 #include "Timestamp.h"
-
+#include <iostream>
 namespace witchpot {
     enum OrderSide {
         SELL, BUY
     };
-
+    
     enum OrderType {
         MARKET, // A market order is an order to buy or sell a security immediately.
-        LIMIT,  // A limit order is an order to buy or sell a security at a specific price or better.
-        STOP, // A stop order is an order to buy or sell a security when its price moves past a particular point, ensuring a higher probability of achieving a predetermined entry or exit price.
+        TAKE_PROFIT,  // A limit order is an order to buy or sell a security at a specific price or better.
+        STOP, // A stop order is an order to buy or sell a security when its price moves past a particular point, ensuring a higher probability of achieving a predetermined entry or exit price.        
     };
 
     enum OrderStatus {
-        PENDING, // Order has been created but not yet processed. Main, stop and limit orders are in this state.
         ACCEPTED, // Order has been accepted by the exchange. Main, stop and limit orders are in this state.
-        FAILED, // Order has been rejected by the exchange. Main, stop and limit orders are in this state.
-        CANCELLED, // Order has been cancelled by the user
         FILLED // Order has been filled by the exchange. Main order is in this state while only one of stop or limit order is in this state at a time and the other is in cancelled state.
     };
 
@@ -75,11 +72,13 @@ namespace witchpot {
                 int quantity,
                 OrderSide side
             ): Order(timestamp, orderId, symbol, price, quantity, side, MARKET) {}
+
+            std::ostream & operator<<(std::ostream & os);
     };
 
-    class LimitOrder: public Order {
+    class TakeProfitOrder: public Order {
         public:
-            LimitOrder(
+            TakeProfitOrder(
                 std::string orderId,
                 float price,                
                 MarketOrder & parentOrder
@@ -90,9 +89,11 @@ namespace witchpot {
                 price, 
                 parentOrder.getQuantity(), 
                 parentOrder.getSide() == BUY ? SELL : BUY, 
-                LIMIT, 
+                TAKE_PROFIT, 
                 parentOrder.getOrderId()
             ) {}
+
+            inline std::ostream & operator<<(std::ostream & os);
     };
 
     class StopOrder: public Order {
@@ -111,6 +112,8 @@ namespace witchpot {
                 STOP, 
                 parentOrder.getOrderId()
             ) {}
+
+            inline std::ostream & operator<<(std::ostream & os);
     };
 }
 #endif
