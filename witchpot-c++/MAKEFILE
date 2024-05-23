@@ -1,23 +1,31 @@
 CC = g++
-CFLAGS = -g -Wall -Wextra --std=c++20
+CFLAGS = -g -Wall -Wextra --std=c++20 -Isrc -Isrc/test
+SRCS = $(wildcard src/*.cpp)
+TEST_SRCS = $(wildcard src/test/*.cpp)
+OBJS = $(patsubst src/%.cpp, obj/%.o, $(SRCS))
+TEST_OBJS = $(patsubst src/test/%.cpp, obj/test/%.o, $(TEST_SRCS))
 
-SRCS = src/Transaction.cpp src/TransactionLog.cpp src/OrderBookEntry.cpp src/Schema.cpp src/Driver.cpp src/OrderBook.cpp src/Order.cpp src/Omen.cpp src/witchpot.cpp src/Timestamp.cpp src/FeedEntry.cpp src/Timeseries.cpp
-OBJS = obj/Transaction.o   obj/TransactionLog.o   obj/OrderBookEntry.o   obj/Schema.o   obj/Driver.o   obj/OrderBook.o   obj/Order.o   obj/Omen.o   obj/witchpot.o   obj/Timestamp.o   obj/FeedEntry.o   obj/Timeseries.o
 EXEC = bin/witchbot
+TEST_EXEC = bin/witchpot-tests
 
-.PHONY: all clean
-
-all: $(EXEC)
+all: clean test main
+main: $(EXEC)
+test: $(TEST_EXEC)
 
 $(EXEC): $(OBJS)
+	@echo "Building $(EXEC)..."
 	$(CC) $(LDFLAGS) $(OBJS) -o $@
+
+$(TEST_EXEC): $(filter-out obj/witchpot.o, $(OBJS)) $(TEST_OBJS)
+	@echo "Building $(TEST_EXEC)..."
+	$(CC) $(LDFLAGS) $(filter-out obj/witchpot.o, $(OBJS)) $(TEST_OBJS) -o $@
 
 obj/%.o: src/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf obj/*.o $(EXEC)
+	rm -rf obj/*.o obj/test/*.o $(EXEC)
 
-# leaks --atExit -- bin/witchbot 
+# leaks --atExit -- bin/witchbot-tests
 # https://gist.github.com/asimshankar/5c96acd1280507940bad9083370fe8dc
 # https://medium.com/@htmbx6/build-and-train-neural-network-with-tensorflow-c-f13f22d3c5b6
