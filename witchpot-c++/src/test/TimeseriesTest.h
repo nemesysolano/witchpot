@@ -1,4 +1,6 @@
 #ifndef TIMESERIESTEST_H
 #define TIMESERIESTEST_H
-void timeSeriesTest();
+#include <string>
+
+void timeSeriesTest(const std::string & path);
 #endif

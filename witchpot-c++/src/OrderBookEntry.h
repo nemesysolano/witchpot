@@ -26,6 +26,15 @@ namespace witchpot {
             OrderSide side
         ) ;
 
+        inline OrderBookEntry(std::string symbol,
+            Timestamp & timestamp,
+            float price,
+            float stop,
+            float takeProfit,
+            OrderSide side
+        ): OrderBookEntry(symbol, timestamp, price, 1, stop, takeProfit, side) {            
+        }
+
         inline const MarketOrder & getMarketOrder() const {
             return *order;
         }

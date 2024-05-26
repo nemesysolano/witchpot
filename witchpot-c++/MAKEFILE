@@ -5,7 +5,7 @@ TEST_SRCS = $(wildcard src/test/*.cpp)
 OBJS = $(patsubst src/%.cpp, obj/%.o, $(SRCS))
 TEST_OBJS = $(patsubst src/test/%.cpp, obj/test/%.o, $(TEST_SRCS))
 
-EXEC = bin/witchbot
+EXEC = bin/witchpot
 TEST_EXEC = bin/witchpot-tests
 
 all: clean test main

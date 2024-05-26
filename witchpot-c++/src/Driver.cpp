@@ -50,22 +50,28 @@ void Driver::createTransactions(const vector<const OrderBookEntry *> & filledOrd
         auto ticket = timeSeries.get(current).value();
         auto marketOrder = orderBookEntry->getMarketOrder();     
         auto stopOrder = orderBookEntry->getStopOrder();
-        auto takeProfitOrder = orderBookEntry->getTakeProfitOrder();       
+        auto takeProfitOrder = orderBookEntry->getTakeProfitOrder();               
         const OrderBookEntry & entry = *orderBookEntry;     
-        cout << filledOrders.size() << endl;
-        if(
-            ticket->getHigh() >= takeProfitOrder.getPrice() || 
-            ticket->getLow() <= takeProfitOrder.getPrice())
-        {             
-            transactionLog->add(current, entry, OrderType::TAKE_PROFIT);   
-        } else if(
-            ticket->getLow() <= stopOrder.getPrice() || 
-            ticket->getHigh() >= stopOrder.getPrice()
-        ) {            
-            transactionLog->add(current, entry, OrderType::STOP);
-        }         
+        OrderSide side = marketOrder.getSide();
 
-    } 
+        if(side == OrderSide::BUY) {
+            if(ticket->getHigh() >= takeProfitOrder.getPrice()) {             
+                cout << "TAKE PROFIT: " << ticket->getHigh() << " >= " << takeProfitOrder.getPrice() << endl;
+                transactionLog->add(current, entry, OrderType::TAKE_PROFIT);   
+            } else if(ticket->getLow() <= stopOrder.getPrice()) {            
+                cout << "STOP: " << ticket->getLow() << " <= " << stopOrder.getPrice() << endl;
+                transactionLog->add(current, entry, OrderType::STOP);
+            }
+        } else if(side == OrderSide::SELL) {
+            if(ticket->getLow() <= takeProfitOrder.getPrice()) {             
+                cout << "TAKE PROFIT: " << ticket->getLow() << " <= " << takeProfitOrder.getPrice() << endl;
+                transactionLog->add(current, entry, OrderType::TAKE_PROFIT);   
+            } else if(ticket->getHigh() >= stopOrder.getPrice()) {            
+                cout << "STOP: " << ticket->getHigh() << " >= " << stopOrder.getPrice() << endl;
+                transactionLog->add(current, entry, OrderType::STOP);
+            }
+        }        
+    }
 }
 
 void Driver::checkOmens(const Timestamp & current) {

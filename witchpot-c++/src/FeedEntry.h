@@ -18,6 +18,10 @@ namespace witchpot {
         public:
             FeedEntry(std::string & symbol, witchpot::Timestamp & timestamp, float open, float low, float high, float close, float adjusted_close, float volume)
                 : symbol(symbol), timestamp(timestamp), open(open), low(low), high(high), close(close), adjusted_close(adjusted_close), volume(volume) {}
+
+            inline FeedEntry(std::string & symbol, witchpot::Timestamp & timestamp, float open, float low, float high, float close, float adjusted_close): FeedEntry(symbol, timestamp, open, low, high, close, adjusted_close, 1) {}
+            inline FeedEntry(std::string & symbol, witchpot::Timestamp & timestamp, float open, float low, float high, float close): FeedEntry(symbol, timestamp, open, low, high, close, close, 1) {}
+
             FeedEntry(const std::string & symbol, const std::string & line);
             FeedEntry(const std::string & symbol, const std::string && line) : FeedEntry(symbol, line) {}
             FeedEntry(const std::string && symbol, const std::string && line) : FeedEntry(symbol, line) {}

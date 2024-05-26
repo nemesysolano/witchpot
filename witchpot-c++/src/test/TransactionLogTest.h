@@ -13,5 +13,7 @@
 
 void transactionsAllBuyWinnersTest();
 void transactionsAllSellWinnersTest();
-void transactionsBuyThenSellWinnersTest();
+void transactionsBuyAndSellWinTest();
+void transactionsBuyWinButSellLose();
+void transactionsBuyLoseButSellWin();
 #endif

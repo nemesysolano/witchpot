@@ -49,14 +49,13 @@ void timeSeriesForSymbol(filesystem::directory_entry entry) {
     }
 }
 
-void timeSeriesTest() {
-    std::vector<std::string> files;
-    std::string path = "/Volumes/samsung-ex/workspaces/witchpot/data/symbols/";
-    std::vector<std::thread> threads;
+void timeSeriesTest(const string & path) {
+    vector<thread> threads;
+    
+    assert(filesystem::exists(path) && filesystem::is_directory(path));
 
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
         threads.emplace_back([=] { timeSeriesForSymbol(entry); });
-        timeSeriesForSymbol(entry);
     }
     
     for (auto &thread : threads) {

@@ -43,6 +43,14 @@ namespace witchpot {
                 float limit
             );
 
+            inline const OrderBookEntry & createBuyOrder (
+                Timestamp & timestamp,
+                std::string symbol,
+                float price,
+                float stop,
+                float limit
+            ) { return createBuyOrder(timestamp, symbol, price, 1, stop, limit); }
+
             const OrderBookEntry & createSellOrder (
                 Timestamp & timestamp,
                 std::string symbol,
@@ -50,7 +58,15 @@ namespace witchpot {
                 int quantity,
                 float stop,
                 float limit
-            );    
+            );   
+
+            inline const OrderBookEntry & createSellOrder (
+                Timestamp & timestamp,
+                std::string symbol,
+                float price,
+                float stop,
+                float limit
+            ) { return createSellOrder(timestamp, symbol, price, 1, stop, limit); } 
 
             std::vector<const OrderBookEntry *> fillOrders(std::function<bool(const OrderBookEntry &)> filterFunc); // This function is not thread safe
             std::vector<const OrderBookEntry *> acceptedOrders(std::function<bool(const OrderBookEntry &)> filterFunc);// This function is not thread safe
