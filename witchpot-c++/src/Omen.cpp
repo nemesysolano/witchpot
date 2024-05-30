@@ -2,21 +2,21 @@
 using namespace witchpot;
 using namespace std;
 
-size_t Omen::rowSize() {
-    return 0;
+size_t Omen::rowSize() const {
+    return result.size();
 }
 
-size_t Omen::colSize() {
-    return 0;
+size_t Omen::colSize() const {
+    return result[0].size();
 }
 
 void Omen::calculate(const Timeseries<FeedEntry> & , const Timestamp & )  {
 }
 
-const std::vector<float> & Omen::getResult(size_t ) const {
-    return this->result;
+float Omen::at(size_t row, size_t column) const {
+    return this->result[row][column];
 }
 
-const std::vector<float> & Omen::getResult() const {
-    return this->getResult(0);
+float Omen::at(size_t column) const {
+    return at(0, column);
 }

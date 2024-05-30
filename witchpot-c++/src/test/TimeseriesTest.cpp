@@ -10,7 +10,8 @@
 #include <iostream>
 #include "test/TimeseriesTest.h"
 #include <vector>
-#include <thread>
+#include <omp.h>
+
 
 using namespace std;
 using namespace witchpot;
@@ -19,30 +20,45 @@ void timeSeriesForSymbol(string & path) {
     vector<string> files;
     ifstream is(path);
     Timeseries<FeedEntry> timeSeries(is, path);
-    
+      
     
     if (timeSeries.size() > 0)
     {
-        auto end = timeSeries.getEnd();
+        auto finish = timeSeries.getEnd();
         auto start = timeSeries.getStart();
         auto eof = timeSeries.getEof();
         auto current(start);
-        assert(timeSeries.contains(start) && timeSeries.contains(end));
-        size_t counter = 0;
+        assert(timeSeries.contains(start) && timeSeries.contains(finish));
+        auto begin = TimeseriesIterator<FeedEntry>::begin(timeSeries);
+        auto end = TimeseriesIterator<FeedEntry>::end(timeSeries);
 
-        while (current != eof)
+        // Convert into a foreach loop
+        for (;begin != end; ++begin)
         {                
             assert(timeSeries.contains(current));
             timeSeries.goToNext(current);
         }
-        assert(counter = timeSeries.size());
+
+        auto daysDiffRange = eof.daysDiff(start);
+        auto daysDiffCurrent = current.daysDiff(start);
+        auto daysDiffIterator = begin.get().daysDiff(start);
+
+        cout  << path <<  endl;    
+        assert(daysDiffCurrent == daysDiffRange);
+        assert(daysDiffRange == daysDiffIterator);
+        
         assert(current == eof);
 
-        cout << path << ' ' << timeSeries.size() << ' ' << timeSeries.getStart() << ' ' << timeSeries.getEnd() << ' ' << this_thread::get_id() << endl;
+        
     }    
 }
 
-void timeSeriesForSymbol(filesystem::directory_entry entry) {
+void timeSeriesForSymbol(
+        const vector<filesystem::directory_entry> & entries,        
+        size_t index
+    ) 
+{
+    auto & entry = entries[index];
     if(!entry.is_directory()) {
         string path = entry.path().string();
         timeSeriesForSymbol(path);
@@ -50,17 +66,21 @@ void timeSeriesForSymbol(filesystem::directory_entry entry) {
 }
 
 void timeSeriesTest(const string & path) {
-    vector<thread> threads;
-    
+    vector<filesystem::directory_entry> entries;    
     assert(filesystem::exists(path) && filesystem::is_directory(path));
+    omp_set_num_threads(4);
 
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
-        threads.emplace_back([=] { timeSeriesForSymbol(entry); });
+        entries.push_back(entry);
+    }
+
+    const size_t size = entries.size();
+
+    #pragma omp parallel for    
+    for (size_t i = 0; i < size; i++) {
+        timeSeriesForSymbol(entries, i);
     }
     
-    for (auto &thread : threads) {
-        thread.join();
-    }
 }
 
 

@@ -8,13 +8,19 @@
 namespace witchpot {
     class Omen {        // aka Indicator
         protected:
-            std::vector<float> result;
+            std::vector<std::vector<float>> result;
         public:
-            virtual size_t rowSize();
-            virtual size_t colSize();
+            inline Omen(size_t rows, size_t columns) {
+                this->result = std::vector<std::vector<float>>(rows, std::vector<float>(columns, 0));
+            }
+            virtual size_t rowSize() const;
+            virtual size_t colSize() const;
             virtual void calculate(const Timeseries<FeedEntry> & timeSeries, const Timestamp & current);
-            virtual const std::vector<float> & getResult(size_t) const;
-            virtual const std::vector<float> & getResult() const;
+            virtual float at(size_t row, size_t column) const;
+            virtual float at(size_t row) const;
+            inline operator float () const {
+                return this->result[0][0];
+            }
             virtual ~Omen() = default;
     };
 }

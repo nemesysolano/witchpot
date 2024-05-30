@@ -1,6 +1,7 @@
 #include "OrderBookEntry.h"
 #include <sstream>
 #include <random>
+#include "Memory.h"
 using namespace std;
 using namespace witchpot;
 
@@ -35,32 +36,29 @@ OrderBookEntry::OrderBookEntry(std::string symbol,
     float stop,
     float takeProfit,
     OrderSide side
-) {
-    this->order = new MarketOrder(         
+) : order(
         timestamp,
         createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::MARKET),
         symbol,
         price,
         quantity,
-        side
-    );
-    
-    this->limitOrder = new TakeProfitOrder(
+        side  
+    ),
+    limitOrder(
         createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::TAKE_PROFIT),
         takeProfit,                
-        *order
-    );
-
-    this->stopOrder = new StopOrder(
+        order
+    ),
+    stopOrder(
         createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::STOP),
         stop,                
-        *order
-    );
+        order
+    ) 
+ {
+    
 }
 
 OrderBookEntry::~OrderBookEntry() {
-    delete order;
-    delete limitOrder;
-    delete stopOrder;
+    
 }
  

@@ -2,4 +2,6 @@
 #define WITCHPOT_TESTS_H
 #include "TimeseriesTest.h"
 #include "TransactionLogTest.h"
+#include "OmenTests.h"
+#include "RandomEntrySchemaTest.h"
 #endif

@@ -72,7 +72,8 @@ namespace witchpot {
                 int quantity,
                 OrderSide side
             ): Order(timestamp, orderId, symbol, price, quantity, side, MARKET) {}
-
+            MarketOrder(const MarketOrder & other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), MARKET) {}
+            MarketOrder(const MarketOrder && other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), MARKET) {}
             std::ostream & operator<<(std::ostream & os);
     };
 
@@ -92,7 +93,8 @@ namespace witchpot {
                 TAKE_PROFIT, 
                 parentOrder.getOrderId()
             ) {}
-
+            TakeProfitOrder(const TakeProfitOrder & other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), TAKE_PROFIT, other.getParentOrderId()) {}
+            TakeProfitOrder(const TakeProfitOrder && other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), TAKE_PROFIT, other.getParentOrderId()) {}
             inline std::ostream & operator<<(std::ostream & os);
     };
 
@@ -112,7 +114,8 @@ namespace witchpot {
                 STOP, 
                 parentOrder.getOrderId()
             ) {}
-
+            StopOrder(const StopOrder & other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), STOP, other.getParentOrderId()) {}
+            StopOrder(const StopOrder && other): Order(other.getTimestamp(), other.getOrderId(), other.getSymbol(), other.getPrice(), other.getQuantity(), other.getSide(), STOP, other.getParentOrderId()) {}    
             inline std::ostream & operator<<(std::ostream & os);
     };
 }

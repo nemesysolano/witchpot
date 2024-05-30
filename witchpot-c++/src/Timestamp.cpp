@@ -4,14 +4,15 @@ using namespace witchpot;
 
 static int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static int leapYearDaysInMonth[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-static std::string format("%d-%d-%d %d:%d:%d");
+static char * sscanf_format = "%d-%d-%d %d:%d:%d";
 
 Timestamp::Timestamp(const std::string & timestamp) {
     // Define the expected format
     
     // Parse the timestamp string
     int year, month, day, hour, minute, second;
-    auto result = sscanf(timestamp.c_str(), format.c_str(), &year, &month, &day, &hour, &minute, &second);
+    auto result = sscanf(timestamp.c_str(), sscanf_format, &year, &month, &day, &hour, &minute, &second);
+    
     
     // Check if the parsing was successful
     if (result == 6) {
@@ -127,4 +128,16 @@ Timestamp Timestamp::now() {
 
 witchpot::Timestamp extractDate(Timestamp & timestamp) {
     return Timestamp(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), 0, 0, 0);
+}
+
+int Timestamp::daysDiff(const Timestamp & other) const {
+    std::tm a = {0, 0, 0, day, month - 1, year - 1900};
+    std::tm b = {0, 0, 0, other.day, other.month - 1, other.year - 1900};
+    std::time_t x = std::mktime(&a);
+    std::time_t y = std::mktime(&b);
+    if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) ) {
+        double difference = std::difftime(y, x) / (60 * 60 * 24);
+        return std::abs(difference);
+    }
+    return -1;
 }

@@ -73,7 +73,11 @@
         "__mutex_base": "cpp",
         "random": "cpp",
         "numeric": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "filesystem": "cpp",
+        "span": "cpp",
+        "ranges": "cpp",
+        "cassert": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

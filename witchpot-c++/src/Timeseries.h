@@ -22,6 +22,7 @@ namespace witchpot {
             witchpot::Timestamp  eof;
         public:
             Timeseries() {}
+            
             Timeseries(std::istream & is, const std::string & symbol) {
                 std::string line;
                 if(is.good()) {
@@ -99,6 +100,31 @@ namespace witchpot {
             Timestamp extractDate(Timestamp & timestamp) ;
             inline Timestamp extractDate(Timestamp && timestamp) { return extractDate(timestamp); }
 
+    };
+
+    template <typename T> class TimeseriesIterator {
+        private:
+            const Timeseries<T> & timeseries;
+            Timestamp current;
+        public:
+            TimeseriesIterator(const Timeseries<T> & timeseries, const Timestamp & timestamp): timeseries(timeseries), current(timestamp) {}
+            TimeseriesIterator(const Timeseries<T> & timeseries, const Timestamp && timestamp): timeseries(timeseries), current(timestamp) {}
+            inline const T & operator*() const { return *timeseries.get(current).value(); }
+            inline const T * operator->() const { return timeseries.get(current).value(); }
+            inline TimeseriesIterator<T> & operator++() {
+                timeseries.goToNext(current);
+                return *this;
+            }
+            inline TimeseriesIterator<T> operator++(int) {
+                TimeseriesIterator<T> copy(*this);
+                timeseries.goToNext(current);
+                return copy;
+            }
+            inline bool operator == (const TimeseriesIterator<T> & other) const { return current == other.current; }
+            inline bool operator != (const TimeseriesIterator<T> & other) const { return current != other.current; }
+            static TimeseriesIterator<T> begin(const Timeseries<T> & source) { return TimeseriesIterator<T>(source, source.getStart()); }
+            static TimeseriesIterator<T> end(const Timeseries<T> & source) { return TimeseriesIterator<T>(source, source.getEof()); }    
+            const Timestamp get() const { return current; }                  
     };
 
 

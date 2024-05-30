@@ -5,15 +5,15 @@ namespace witchpot {
     struct OrderBookEntry {
         private:
             OrderStatus status;
-            MarketOrder * order;
-            TakeProfitOrder * limitOrder;
-            StopOrder * stopOrder;
+            MarketOrder order ;
+            TakeProfitOrder limitOrder;
+            StopOrder stopOrder;
         public:
 
         OrderBookEntry(
-            MarketOrder * order_,
-            TakeProfitOrder * limitOrder_,
-            StopOrder * stopOrder_
+            MarketOrder & order_,
+            TakeProfitOrder & limitOrder_,
+            StopOrder & stopOrder_
         ): status(OrderStatus::ACCEPTED), order(order_), limitOrder(limitOrder_), stopOrder(stopOrder_) {
             
         }
@@ -36,15 +36,15 @@ namespace witchpot {
         }
 
         inline const MarketOrder & getMarketOrder() const {
-            return *order;
+            return order;
         }
 
         inline const TakeProfitOrder & getTakeProfitOrder() const {
-            return *limitOrder;
+            return limitOrder;
         }
 
         inline const StopOrder & getStopOrder() const {
-            return *stopOrder;
+            return stopOrder;
         }
 
         inline OrderStatus getStatus() const {

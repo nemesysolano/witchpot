@@ -7,14 +7,12 @@ using namespace witchpot;
 using namespace std;
 
 OrderBook::OrderBook(const OrderBook & other): is_owner(false)  {
-    orderEntries = other.orderEntries;
     acceptedOrderEntries = other.acceptedOrderEntries;
     filledOrderEntries = other.filledOrderEntries;
     cancelledOrderEntries = other.cancelledOrderEntries;
 }
 
 OrderBook & OrderBook::operator=(const OrderBook & other) {
-    orderEntries = other.orderEntries;
     acceptedOrderEntries = other.acceptedOrderEntries;
     filledOrderEntries = other.filledOrderEntries;
     cancelledOrderEntries = other.cancelledOrderEntries;
@@ -23,7 +21,7 @@ OrderBook & OrderBook::operator=(const OrderBook & other) {
 }
 
 
-const OrderBookEntry & OrderBook::createOrder(
+void OrderBook::createOrder(
     Timestamp & timestamp,
     std::string symbol,
     float price,
@@ -42,13 +40,11 @@ const OrderBookEntry & OrderBook::createOrder(
         side
     );
     
-    const string orderId = entry->getMarketOrder().getOrderId();
-    orderEntries->insert(std::make_pair(orderId, entry));    
-    acceptedOrderEntries->insert(std::make_pair(entry->getMarketOrder().getOrderId(), entry));
-    return *entry;
+    string orderId(entry->getMarketOrder().getOrderId());    
+    acceptedOrderEntries->insert_or_assign(orderId, entry); 
 }
 
-const OrderBookEntry & OrderBook::createBuyOrder (
+void OrderBook::createBuyOrder (
     Timestamp & timestamp,
     std::string symbol,
     float price,
@@ -56,11 +52,11 @@ const OrderBookEntry & OrderBook::createBuyOrder (
     float stop,
     float takeProfit
 ) {
-    return createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::BUY);
+    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::BUY);
 
 }
 
-const OrderBookEntry & OrderBook::createSellOrder (
+void OrderBook::createSellOrder (
     Timestamp & timestamp,
     std::string symbol,
     float price,
@@ -68,49 +64,68 @@ const OrderBookEntry & OrderBook::createSellOrder (
     float stop,
     float takeProfit
 ) {
-    return createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::SELL);
+    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::SELL);
 }
 
-vector<const OrderBookEntry *> OrderBook::fillOrders(std::function<bool(const OrderBookEntry &)> filterFunc) {
+vector<const OrderBookEntry *> OrderBook::fillOrders(const Timeseries<FeedEntry> & timeSeries, const Timestamp & current) {
     std::vector<const OrderBookEntry *> result;
-    for (auto const& [key, value] : *acceptedOrderEntries) {         //TODO: Fill accepted order entries.
-        if (filterFunc(*value)) { //REMARK: filter func should use parallel processing if possible      
-            result.push_back(value);
-            filledOrderEntries->insert(std::make_pair(value->getMarketOrder().getOrderId(), value));
-            acceptedOrderEntries->erase(value->getMarketOrder().getOrderId());            
+    for (auto const& [key, orderBookEntry] : *acceptedOrderEntries) {         //TODO: Fill accepted order entries.
+        string orderId(orderBookEntry->getMarketOrder().getOrderId());
+        auto marketOrder = orderBookEntry->getMarketOrder();     
+        auto stopOrder = orderBookEntry->getStopOrder();
+        auto takeProfitOrder = orderBookEntry->getTakeProfitOrder();
+        bool fill = false;
+
+        if(marketOrder.getTimestamp() < current && timeSeries.contains(current)){
+            const FeedEntry & feedEntry = *timeSeries.get(current).value();
+            
+            if(marketOrder.getSide() == OrderSide::BUY) {            
+                fill = feedEntry.getHigh() >= takeProfitOrder.getPrice() || feedEntry.getLow() <= stopOrder.getPrice();
+            } else {
+                fill = feedEntry.getLow() <= takeProfitOrder.getPrice() || feedEntry.getHigh() >= stopOrder.getPrice();
+            }
         }
+
+        if (fill) { //REMARK: filter func should use parallel processing if possible      
+            result.push_back(orderBookEntry);
+            filledOrderEntries->insert(std::make_pair(orderId, orderBookEntry));
+        }
+    }
+
+    for(const OrderBookEntry * acceptedEntry : result) {
+        auto orderId = acceptedEntry->getMarketOrder().getOrderId();
+        acceptedOrderEntries->erase(orderId);
+        filledOrderEntries->insert(std::make_pair(orderId, acceptedEntry));
     }
 
     return result;
 }
     
-vector<const OrderBookEntry *> OrderBook::acceptedOrders(std::function<bool(const OrderBookEntry &)> filterFunc) {
-    std::vector<const OrderBookEntry *> result;
-    for (auto const& [key, value] : *acceptedOrderEntries) {
-        if (filterFunc(*value)) { //REMARK: filter func should use parallel processing if possible
-            result.push_back(value);
-        }
-    }
-    return result;
-}
 
 OrderBook::~OrderBook() {
-    if(is_owner) {
-        for(auto const& [key, value] : *orderEntries) {
+    if(is_owner) {            
+        for(auto const& [key, value] : *acceptedOrderEntries) {   
             delete value;
-        }
-
-        orderEntries->clear();
-        delete orderEntries;
-        
+        }        
         acceptedOrderEntries->clear();
         delete acceptedOrderEntries;
+        acceptedOrderEntries = nullptr;
 
+        for(auto const& [key, value] : *filledOrderEntries) {        
+            delete value;
+        }
         filledOrderEntries->clear();
         delete filledOrderEntries;
+        filledOrderEntries = nullptr;
 
-        cancelledOrderEntries;
+        for(auto const& [key, value] : *cancelledOrderEntries) {     
+            delete value;
+        }
+        cancelledOrderEntries->clear();
         delete cancelledOrderEntries;
+        cancelledOrderEntries = nullptr;
+
+        is_owner = false;
     }
 }
 

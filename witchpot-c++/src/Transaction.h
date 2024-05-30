@@ -64,10 +64,10 @@ namespace witchpot {
             float totalLost;            
         // define an << operator that outputs this class elements to the ostream. I want two version for this operator. One for TransactionSummary references and another for TransactionSummary pointers.
         friend std::ostream & operator<<(std::ostream & os, const TransactionSummary & summary) {
-            os << "Buy Count: " << summary.buyCount << std::endl;
-            os << "Sell Count: " << summary.sellCount << std::endl;
-            os << "Total Won: " << summary.totalWon << std::endl;
-            os << "Total Lost: " << summary.totalLost << std::endl;
+            os << "(buy_count=" << summary.buyCount;
+            os << ", sell_count=" << summary.sellCount;
+            os << ", total_won=" << summary.totalWon;
+            os << ", total_lost=" << summary.totalLost << ')';
             return os;
         }
     };

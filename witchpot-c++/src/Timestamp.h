@@ -2,6 +2,9 @@
 #define TIMESTAMP_H
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <ctime>
+
 namespace witchpot {
     class Timestamp {
         private: 
@@ -33,6 +36,7 @@ namespace witchpot {
         inline int getMinute() const { return minute; }
         inline int getSecond() const { return second; }        
         Timestamp addDay(int days) const;
+        int daysDiff(const Timestamp & other) const;
         inline Timestamp inc(int delta) const { return addDay(delta);}
         inline Timestamp & incSelf(int delta) { addDayToSelf(delta); return *this;}
         bool operator < (const Timestamp& other) const;
