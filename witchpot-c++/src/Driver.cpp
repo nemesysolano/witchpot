@@ -6,7 +6,6 @@ using namespace std;
 
 
 void Driver::run() {
-    Timestamp eof(timeSeries.getEof());
     Timestamp current(timeSeries.getStart());
     auto begin = TimeseriesIterator<FeedEntry>::begin(timeSeries);
     auto end = TimeseriesIterator<FeedEntry>::end(timeSeries);

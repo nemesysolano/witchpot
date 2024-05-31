@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/libomp/18.1.6/include"
+                "/opt/homebrew/Cellar/libomp/18.1.6/include",
+                "${workspaceFolder}/witchpot-c++/src"
             ],
             "defines": [],
             "macFrameworkPath": [

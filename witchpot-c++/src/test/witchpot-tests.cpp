@@ -4,12 +4,13 @@ using namespace std;
 int main() {        
     string path = "../data/symbols/";
     // timeSeriesTest(path);
-    transactionsAllBuyWinnersTest();
-    transactionsAllSellWinnersTest();
-    transactionsBuyAndSellWinTest();
-    transactionsBuyWinButSellLose();
-    transactionsBuyLoseButSellWin();
-    testRandomEntryOmen();
-    testRandomEntrySchema(path);
+    // transactionsAllBuyWinnersTest();
+    // transactionsAllSellWinnersTest();
+    // transactionsBuyAndSellWinTest();
+    // transactionsBuyWinButSellLose();
+    // transactionsBuyLoseButSellWin();
+    // testRandomEntryOmen();
+    // testRandomEntrySchema(path);
+    testTACandleOmen(path);
     return 0;
 }
