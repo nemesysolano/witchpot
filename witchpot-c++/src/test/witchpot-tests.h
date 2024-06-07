@@ -4,4 +4,6 @@
 #include "TransactionLogTest.h"
 #include "OmenTests.h"
 #include "RandomEntrySchemaTest.h"
+#include "TACandlesTest.h"
+#include "TAProfitDataGenSchemaTest.h"
 #endif

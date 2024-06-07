@@ -28,7 +28,8 @@ void OrderBook::createOrder(
     int quantity,
     float stop,
     float takeProfit,
-    OrderSide side
+    OrderSide side,
+    std::map<std::string, float> & additionalInfo
 ) {   
     auto entry = new OrderBookEntry(
         symbol,
@@ -37,22 +38,25 @@ void OrderBook::createOrder(
         quantity,
         stop,
         takeProfit,
-        side
+        side,
+        additionalInfo
     );
     
-    string orderId(entry->getMarketOrder().getOrderId());    
+    string orderId(entry->getMarketOrder().getOrderId());   
+    allOrderEntries->insert_or_assign(orderId, entry); 
     acceptedOrderEntries->insert_or_assign(orderId, entry); 
 }
 
 void OrderBook::createBuyOrder (
-    Timestamp & timestamp,
-    std::string symbol,
-    float price,
-    int quantity,
-    float stop,
-    float takeProfit
-) {
-    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::BUY);
+        Timestamp & timestamp,
+        std::string symbol,
+        float price,
+        int quantity,
+        float stop,
+        float takeProfit,
+        std::map<std::string, float> & additionalInfo
+    ) {
+    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::BUY, additionalInfo);
 
 }
 
@@ -62,9 +66,10 @@ void OrderBook::createSellOrder (
     float price,
     int quantity,
     float stop,
-    float takeProfit
+    float takeProfit,
+    std::map<std::string, float> & additionalInfo
 ) {
-    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::SELL);
+    createOrder(timestamp, symbol, price, quantity, stop, takeProfit, OrderSide::SELL, additionalInfo);
 }
 
 vector<const OrderBookEntry *> OrderBook::fillOrders(const Timeseries<FeedEntry> & timeSeries, const Timestamp & current) {
@@ -104,23 +109,21 @@ vector<const OrderBookEntry *> OrderBook::fillOrders(const Timeseries<FeedEntry>
 
 OrderBook::~OrderBook() {
     if(is_owner) {            
-        for(auto const& [key, value] : *acceptedOrderEntries) {   
+        for(auto const& [key, value] : *allOrderEntries) {   
             delete value;
         }        
+        allOrderEntries->clear();
+        delete allOrderEntries;
+        allOrderEntries = nullptr;
+        
         acceptedOrderEntries->clear();
         delete acceptedOrderEntries;
         acceptedOrderEntries = nullptr;
 
-        for(auto const& [key, value] : *filledOrderEntries) {        
-            delete value;
-        }
         filledOrderEntries->clear();
         delete filledOrderEntries;
         filledOrderEntries = nullptr;
 
-        for(auto const& [key, value] : *cancelledOrderEntries) {     
-            delete value;
-        }
         cancelledOrderEntries->clear();
         delete cancelledOrderEntries;
         cancelledOrderEntries = nullptr;

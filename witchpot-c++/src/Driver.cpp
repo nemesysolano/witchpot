@@ -18,14 +18,12 @@ void Driver::run() {
         applySchemas(current);
     });
 
-
     
 }   
 
 vector<const OrderBookEntry *> Driver::fillOrders(const Timestamp & current) {
     OrderBook & orderBook = * this->orderBook;  
-    
-    
+
     return orderBook.fillOrders(timeSeries, current);    
 }
 

@@ -7,10 +7,24 @@
 #include "Omen.h"
 
 namespace witchpot {
+    extern const size_t TA_CANDLE_OMEN_COLUMNS;
+    extern const size_t TA_CANDLE_OMEN_WEIGHT;
+    extern const size_t TA_CANDLE_OMEN_OPEN;
+    extern const size_t TA_CANDLE_OMEN_LOW;
+    extern const size_t TA_CANDLE_OMEN_HIGH;
+    extern const size_t TA_CANDLE_OMEN_CLOSE;
     class TACandles {
         protected:
             std::string symbol;
             Timestamp timeStamp;
+            float open = 0;
+            float high = 0;
+            float low = 0;
+            float close = 0;
+            float adjClose = 0;
+            float volume = 0;
+            float dividends = 0;
+            float stockSplits = 0;
             float cdl2Crows= 0; // CDL_2CROWS
             float cdl3BlackCrows= 0; // CDL_3BLACKCROWS
             float cdl3Inside= 0; // CDL_3INSIDE
@@ -73,21 +87,31 @@ namespace witchpot {
             float cdlUnique3River= 0; // CDL_UNIQUE3RIVER
             float cdlUpsideGap2Crows= 0; // CDL_UPSIDEGAP2CROWS
             float cdlXSideGap3Methods= 0; // CDL_XSIDEGAP3METHODS
+            float * * cdlPointers;
         public:
-            TACandles() {}
             TACandles(const std::string & symbol, const std::string & line);
             inline const Timestamp & getTimestamp() const {return timeStamp;}
             inline const std::string & getSymbol() const {return symbol;}
+            float weight() const;
+            float openPrice() const {return open;}
+            float lowPrice() const {return low;}    
+            float highPrice() const {return high;}  
+            float closePrice() const {return close;}
+            float getVolume() const {return volume;}
+            static float weight(float * * cdlPointers, size_t size);
+            ~TACandles();
 
     };
 
-    class TACandleOmen: Omen {
+    class TACandleOmen: public Omen {
         std::string symbol;
         Timeseries<TACandles> * timeSeries = nullptr;
         bool is_owner = true;
     public:
+        static const std::string & name();  
         TACandleOmen(std::istream & is, std::string & symbol);
         TACandleOmen(Timeseries<TACandles> * timeSeries);
+        virtual void calculate(const Timeseries<FeedEntry> & timeSeries, const Timestamp & current);
         inline const Timeseries<TACandles> & getTimeSeries() const {
             return *timeSeries;
         }

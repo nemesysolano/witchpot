@@ -77,7 +77,10 @@
         "filesystem": "cpp",
         "span": "cpp",
         "ranges": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "format": "cpp",
+        "regex": "cpp",
+        "__availability": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

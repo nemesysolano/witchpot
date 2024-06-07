@@ -13,12 +13,11 @@
 using namespace std;
 using namespace witchpot;
 
-void testRandomEntrySchemaForSymbol(witchpot::RandomEntrySchemaJob & entry) 
+void testRandomEntrySchemaForSymbol(witchpot::Job & entry) 
 {
     if(entry.is_directory()) {
         return;
     }
-
     
     map<string,unique_ptr<Schema>> schemas;
     map<string,unique_ptr<Omen>> omens;
@@ -29,52 +28,40 @@ void testRandomEntrySchemaForSymbol(witchpot::RandomEntrySchemaJob & entry)
     Timeseries<FeedEntry> timeSeries(is, entry.path());      
     Driver driver(timeSeries, schemas, omens);
     auto orderBook = driver.getOrderBook();
-
     driver.run();            
-    entry.createRandomEntrySchemaJobResult(0.0, 0.0, driver.getTransactionLog().getTransactionSummary(), 
+    
+    entry.createJobResult(0.0, 0.0, driver.getTransactionLog().getTransactionSummary(), 
         orderBook.acceptedOrdersCount(),
         orderBook.filledOrdersCount(),
         orderBook.cancelledOrdersCount()
     );
-    const RandomEntrySchemaJobResult & result = entry[0];
+    const JobResult & result = entry[0];
     cout << entry.path() << ':' << result << endl;        
     assert(
         ((int)timeSeries.size()) > orderBook.acceptedOrdersCount() + orderBook.filledOrdersCount() + orderBook.cancelledOrdersCount()
     );
 }
 
+
 void testRandomEntrySchema(const string & path) { // https://www.openmp.org/wp-content/uploads/OpenMP3.1-CCard.pdf
     auto procs = omp_get_num_procs() - 1;
-    RandomEntrySchemaJobQueue randomEntrySchemaJobQueue;
+    JobQueue jobQueue;
     assert(filesystem::exists(path) && filesystem::is_directory(path));
 
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
-        randomEntrySchemaJobQueue.add(entry.path().string());   
+        if(entry.is_directory() || entry.path().extension() != ".csv"){
+            continue;
+        }
+        jobQueue.add(entry.path().string());           
     }
 
-    const size_t size = randomEntrySchemaJobQueue.size();
+    const size_t size = jobQueue.size();
 
-    #pragma omp parallel for shared(size, randomEntrySchemaJobQueue) default(none) schedule(dynamic, 1) num_threads(procs)
+    #pragma omp parallel for shared(size, jobQueue) default(none) schedule(dynamic, 1) num_threads(procs)
     for (size_t i = 0; i < size; i++) {
-        testRandomEntrySchemaForSymbol(randomEntrySchemaJobQueue[i]);
+        testRandomEntrySchemaForSymbol(jobQueue[i]);
 
     }
 
 }
 
-RandomEntrySchemaJob::~RandomEntrySchemaJob() {
-    for (auto result : results) {
-        delete result;
-    }
-}
-
-std::ostream & witchpot::operator<<(std::ostream & os, const RandomEntrySchemaJobResult & result) {
-    os << "(sl_rate=" << result.getStopLossRate();
-    os << ", tp_rate=" << result.getTakeProfitRate();
-    os << ", summary=" << result.getSummary();
-    os << ", orders_count=" << result.getOrderEntriesCount();
-    os << ", accepted_orders_count=" << result.getAcceptedOrdersCount();
-    os << ", filled_orders_count=" << result.getFilledOrdersCount();
-    os << ", cancelled_orders_count=" << result.getCancelledOrdersCount() << ')' << std::endl;
-    return os;
-}

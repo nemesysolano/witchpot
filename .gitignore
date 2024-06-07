@@ -1,3 +1,13 @@
+data/symbols/test/bare/*.csv
+data/symbols/test/normalized/*.csv
+data/symbols/validate/bare/*.csv
+data/symbols/validate/normalized/*.csv
+data/symbols/train/bare/*.csv
+data/symbols/train/normalized/*.csv
+data/results/test/normalized/*.csv
+data/results/validate/normalized*/.csv
+data/results/train/normalized/*.csv 
+data/results/train/merged/*.csv 
 data/symbols/test/*.csv
 data/symbols/validate/*.csv
 data/symbols/train/*.csv

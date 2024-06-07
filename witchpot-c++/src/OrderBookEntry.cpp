@@ -28,6 +28,36 @@ static string createOrderId(
     scramble_string(clerText);
     return clerText;
 }
+OrderBookEntry::OrderBookEntry(std::string symbol,
+    Timestamp & timestamp,
+    float price,
+    int quantity,
+    float stop,
+    float takeProfit,
+    OrderSide side,
+    std::map<std::string, float> & additionalInfo_
+) : order(
+        timestamp,
+        createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::MARKET),
+        symbol,
+        price,
+        quantity,
+        side  
+    ),
+    limitOrder(
+        createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::TAKE_PROFIT),
+        takeProfit,                
+        order
+    ),
+    stopOrder(
+        createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::STOP),
+        stop,                
+        order
+    ),
+    additionalInfo(additionalInfo_) 
+ {
+    
+}
 
 OrderBookEntry::OrderBookEntry(std::string symbol,
     Timestamp & timestamp,
@@ -53,7 +83,8 @@ OrderBookEntry::OrderBookEntry(std::string symbol,
         createOrderId(timestamp, symbol, price, quantity, stop, takeProfit, side, OrderType::STOP),
         stop,                
         order
-    ) 
+    ),
+    additionalInfo({}) 
  {
     
 }

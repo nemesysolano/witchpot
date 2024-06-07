@@ -6,5 +6,5 @@
 #include "RandomEntryOmen.h"
 
 void testRandomEntryOmen();
-void testTACandleOmen(std::string & path);
+void testTACandleOmen(std::string & trainBarePath);
 #endif

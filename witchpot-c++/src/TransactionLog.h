@@ -16,6 +16,12 @@ namespace witchpot {
             TransactionLog & operator=(const TransactionLog && other) = delete;
             TransactionLog(const TransactionLog & other);
             TransactionLog & operator=(const TransactionLog & other);
+            inline const Transaction & operator[](size_t index) const {
+                return *transactions->at(index);
+            }
+            inline size_t size() const {
+                return transactions->size();
+            }
             inline void add(
                 const Timestamp & timestamp,
                 const OrderBookEntry & orderBookEntry,

@@ -17,7 +17,7 @@ namespace witchpot {
             virtual size_t colSize() const;
             virtual void calculate(const Timeseries<FeedEntry> & timeSeries, const Timestamp & current);
             virtual float at(size_t row, size_t column) const;
-            virtual float at(size_t row) const;
+            virtual float at(size_t column) const;
             inline operator float () const {
                 return this->result[0][0];
             }

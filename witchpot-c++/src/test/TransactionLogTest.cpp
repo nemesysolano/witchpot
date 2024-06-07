@@ -20,7 +20,7 @@ void transactionsAllBuyWinnersTest() {
     };
 
     for (auto& values : csvValues) {
-        orderBook.createBuyOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createBuyOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
@@ -58,7 +58,7 @@ void transactionsAllSellWinnersTest() {
     };
 
     for (auto& values : csvValues) {
-        orderBook.createSellOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createSellOrder(timestamp, symbol, values[4], 1,  values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
@@ -106,14 +106,14 @@ void transactionsBuyAndSellWinTest() {
 
     //BUY
     for (auto& values : buyCSVValues) {
-        orderBook.createBuyOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createBuyOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
   
     //SELL
     for (auto& values : sellCSVValues) {
-        orderBook.createSellOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createSellOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
@@ -167,14 +167,14 @@ void transactionsBuyWinButSellLose()  {
 
     //BUY
     for (auto& values : buyCSVValues) {
-        orderBook.createBuyOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createBuyOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
   
     //SELL
     for (auto& values : sellCSVValues) {
-        orderBook.createSellOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createSellOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
@@ -225,14 +225,14 @@ void transactionsBuyLoseButSellWin()  {
 
     //BUY
     for (auto& values : buyCSVValues) {
-        orderBook.createBuyOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createBuyOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }
   
     //SELL
     for (auto& values : sellCSVValues) {
-        orderBook.createSellOrder(timestamp, symbol, values[4], values[5], values[6]); // Entry Price, Stop Loss, Take Profit
+        orderBook.createSellOrder(timestamp, symbol, values[4], 1, values[5], values[6]); // Entry Price, Stop Loss, Take Profit
         ++timestamp;
         timeSeries.add(timestamp, new FeedEntry(symbol, timestamp, values[0], values[1], values[2], values[3])); // Open, Low, High, Close
     }

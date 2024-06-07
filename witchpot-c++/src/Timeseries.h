@@ -41,8 +41,7 @@ namespace witchpot {
                         } else if(timestamp > end) {
                             end = timestamp;
                         }
-                        this -> entries[timestamp] = std::unique_ptr<T>(entry);
-
+                        this -> entries[timestamp] = std::unique_ptr<T>(entry);                        
                     }
                     this->start = start;
                     this->end = end;

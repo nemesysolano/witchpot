@@ -25,7 +25,8 @@ void RandomEntrySchema::apply(
         mt19937 gen(rd()); 
         auto symbol = (*(timeSeries.get(current)))->getSymbol();
         auto direction = (float)(*omens.at(RandomEntryOmen::name()));
-        auto entry = *(timeSeries.get(current));
+        auto tomorrow = timeSeries.next(current);
+        auto entry = *(timeSeries.get(tomorrow));
 
         uniform_real_distribution<float> priceDist(min(entry->getOpen(), entry->getClose()), max(entry->getOpen(), entry->getClose()));
         uniform_real_distribution<float> limitDist(0.05, 1);
@@ -35,12 +36,12 @@ void RandomEntrySchema::apply(
 
         if(direction < 0) {
             stop = price * (1+limitDist(gen));
-            limit = price * (1-limitDist(gen));
-
+            limit = price * (1-limitDist(gen));            
             orderBook.createSellOrder(
-                current,
+                tomorrow,
                 symbol,
                 price,
+                1,
                 stop,
                 limit
             );
@@ -49,9 +50,10 @@ void RandomEntrySchema::apply(
             limit = price * (1+limitDist(gen));
 
             orderBook.createBuyOrder(
-                current,
+                tomorrow,
                 symbol,
                 price,
+                1,
                 stop,
                 limit
             );

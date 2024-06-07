@@ -3,11 +3,12 @@ import pandas_ta as ta
 from multiprocessing import Pool, cpu_count
 import yfinance as yf
 
-def download_from_yahoo(symbol):
-    file_name = "data/symbols/{}.csv".format(symbol, )
-    train_file_name = "data/symbols/train/{}.csv".format(symbol, )
-    validate_file_name = "data/symbols/validate/{}.csv".format(symbol, )
-    test_file_name = "data/symbols/test/{}.csv".format(symbol, )
+def download_from_yahoo(symbol):    
+    coalesced_file_name = symbol.replace('=', '')
+    file_name = "data/symbols/{}.csv".format(coalesced_file_name, )
+    train_file_name = "data/symbols/train/{}.csv".format(coalesced_file_name, )
+    validate_file_name = "data/symbols/validate/{}.csv".format(coalesced_file_name, )
+    test_file_name = "data/symbols/test/{}.csv".format(coalesced_file_name, )
 
     try:
         df = yf.Ticker(symbol)
@@ -42,6 +43,6 @@ def download_from_yahoo(symbol):
 
 if __name__ == "__main__":
     pool = Pool(cpu_count())
-    sp500 = pd.read_csv('catalog/russell100.csv', index_col= 'Symbol')    
+    sp500 = pd.read_csv('catalog/forex.csv', index_col= 'Symbol')    
     pool.map(download_from_yahoo, sp500.index)
     
